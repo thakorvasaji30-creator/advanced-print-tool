@@ -1,0 +1,3380 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+
+<title>Advanced Print Tool - Passport, Aadhaar, PVC & A4 Print</title>
+
+<meta name="description" content="Advanced online print tool for passport size photos, Aadhaar cards, PVC cards, custom cards and A4 documents. Crop, resize, preview, download and print easily.">
+
+<meta name="robots" content="index, follow">
+
+<style>
+*{box-sizing:border-box}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  margin:0;
+  font-family:Arial,"Noto Sans Gujarati",sans-serif;
+  background:#f1f5f9;
+  color:#172033;
+  line-height:1.6;
+}
+
+header{
+  background:linear-gradient(135deg,#075985,#2563eb);
+  color:white;
+  padding:24px 15px;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:28px;
+}
+
+header p{
+  margin:6px 0 0;
+  font-size:15px;
+}
+
+nav{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:7px;
+  padding:10px;
+  background:white;
+  position:sticky;
+  top:0;
+  z-index:50;
+  box-shadow:0 2px 8px #0001;
+}
+
+nav button{
+  border:0;
+  background:#e0f2fe;
+  color:#075985;
+  padding:9px 13px;
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+nav button:hover{
+  background:#bae6fd;
+}
+
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:15px;
+}
+
+.section{
+  background:white;
+  margin-bottom:18px;
+  padding:20px;
+  border-radius:14px;
+  box-shadow:0 2px 12px #0001;
+}
+
+.section h2{
+  margin-top:0;
+  color:#075985;
+}
+
+.section h3{
+  color:#075985;
+}
+
+.row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  align-items:end;
+}
+
+.field{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.field label{
+  font-weight:bold;
+  font-size:13px;
+}
+
+input,select{
+  padding:9px;
+  border:1px solid #cbd5e1;
+  border-radius:7px;
+  font-size:14px;
+}
+
+input[type=file]{
+  max-width:100%;
+}
+
+.btn{
+  border:0;
+  border-radius:8px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:bold;
+  background:#2563eb;
+  color:white;
+}
+
+.btn.green{
+  background:#16a34a;
+}
+
+.btn.orange{
+  background:#ea580c;
+}
+
+.btn.gray{
+  background:#475569;
+}
+
+.editor{
+  margin-top:15px;
+  background:#e2e8f0;
+  border-radius:10px;
+  padding:12px;
+}
+
+.cropStage{
+  position:relative;
+  display:inline-block;
+  max-width:100%;
+  line-height:0;
+  overflow:hidden;
+  background:#111827;
+  border-radius:5px;
+}
+
+.cropStage img{
+  display:block;
+  max-width:100%;
+  max-height:500px;
+  width:auto;
+  height:auto;
+  user-select:none;
+  -webkit-user-drag:none;
+}
+
+.cropRect{
+  position:absolute;
+  border:2px solid #22c55e;
+  background:#22c55e22;
+  cursor:move;
+  touch-action:none;
+}
+
+.cropRect:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  border:1px dashed white;
+  pointer-events:none;
+}
+
+.handle{
+  position:absolute;
+  width:14px;
+  height:14px;
+  background:#22c55e;
+  border:2px solid white;
+  border-radius:50%;
+  z-index:5;
+}
+
+.tl{
+  left:-8px;
+  top:-8px;
+  cursor:nwse-resize;
+}
+
+.tr{
+  right:-8px;
+  top:-8px;
+  cursor:nesw-resize;
+}
+
+.bl{
+  left:-8px;
+  bottom:-8px;
+  cursor:nesw-resize;
+}
+
+.br{
+  right:-8px;
+  bottom:-8px;
+  cursor:nwse-resize;
+}
+
+.cropInfo{
+  margin-top:10px;
+  padding:10px;
+  background:white;
+  border-radius:8px;
+  font-size:13px;
+}
+
+.previewBox{
+  margin-top:15px;
+  background:#f8fafc;
+  padding:12px;
+  border-radius:10px;
+}
+
+canvas{
+  max-width:100%;
+  border:1px solid #cbd5e1;
+  background:white;
+}
+
+.infoGrid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
+}
+
+.infoCard{
+  background:#f8fafc;
+  border:1px solid #e2e8f0;
+  border-radius:12px;
+  padding:16px;
+}
+
+.infoCard h3{
+  margin-top:0;
+}
+
+.guide{
+  border-left:4px solid #2563eb;
+  padding:14px 16px;
+  background:#f8fafc;
+  margin:12px 0;
+  border-radius:8px;
+}
+
+.contactBox{
+  background:#eff6ff;
+  padding:18px;
+  border-radius:12px;
+}
+
+footer{
+  background:#0f172a;
+  color:#cbd5e1;
+  padding:30px 15px;
+  margin-top:20px;
+}
+
+.footerInner{
+  max-width:1100px;
+  margin:auto;
+  text-align:center;
+}
+
+.footerLinks{
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:8px;
+  margin:15px 0;
+}
+
+.footerLinks button{
+  border:0;
+  background:transparent;
+  color:#bfdbfe;
+  cursor:pointer;
+  font-size:14px;
+}
+
+.footerLinks button:hover{
+  color:white;
+  text-decoration:underline;
+}
+
+.small{
+  font-size:13px;
+  color:#64748b;
+}
+
+@media(max-width:700px){
+
+  .infoGrid{
+    grid-template-columns:1fr;
+  }
+
+  .container{
+    padding:8px;
+  }
+
+  .section{
+    padding:13px;
+  }
+
+  nav button{
+    padding:8px 10px;
+    font-size:12px;
+  }
+
+  .row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+  }
+
+  .field input,
+  .field select{
+    width:100%;
+  }
+
+  .btn{
+    width:100%;
+  }
+}
+
+@media print{
+
+  body>*:not(#printArea){
+    display:none!important;
+  }
+
+  #printArea{
+    display:block!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  #printArea canvas{
+    display:block;
+    margin:0;
+    border:0;
+    max-width:none;
+  }
+
+  @page{
+    margin:0;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>🖨️ Advanced Print Tool</h1>
+
+<p>
+Passport Photo • Aadhaar • PVC Card • Custom Card • A4 Print
+</p>
+
+</header>
+
+
+<nav>
+
+<button onclick="showSection('passport')">📸 Passport</button>
+
+<button onclick="showSection('aadhaar')">🪪 Aadhaar</button>
+
+<button onclick="showSection('pvc')">💳 PVC</button>
+
+<button onclick="showSection('card')">💳 Card</button>
+
+<button onclick="showSection('a4')">📄 A4</button>
+
+<button onclick="showSection('guides')">📚 Guides</button>
+
+<button onclick="showSection('about')">ℹ️ About</button>
+
+<button onclick="showSection('contact')">📞 Contact</button>
+
+<button onclick="showSection('privacy')">🔒 Privacy</button>
+
+<button onclick="showSection('terms')">📜 Terms</button>
+
+<button onclick="showSection('disclaimer')">⚠️ Disclaimer</button>
+
+</nav>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     PASSPORT
+===================================================== -->
+
+<section id="passport" class="section">
+
+<h2>📸 Passport Size Photo</h2>
+
+<p>
+Create passport-size photos online with crop, resize, ratio lock,
+rotation, preview, download and print options.
+</p>
+
+<div class="row">
+
+<div class="field">
+<label>Photo</label>
+<input type="file" id="passFile" accept="image/*">
+</div>
+
+<div class="field">
+<label>Width</label>
+<input type="number" id="passW" value="35" min="1">
+</div>
+
+<div class="field">
+<label>Height</label>
+<input type="number" id="passH" value="45" min="1">
+</div>
+
+<div class="field">
+<label>Unit</label>
+<select id="passUnit">
+<option value="mm">mm</option>
+<option value="px">px</option>
+</select>
+</div>
+
+<div class="field">
+<label>Copies</label>
+<select id="passCount">
+<option value="8">8</option>
+<option value="16">16</option>
+<option value="24">24</option>
+</select>
+</div>
+
+<div class="field">
+<label>Background</label>
+<select id="passBg">
+<option value="white">White</option>
+<option value="blue">Blue</option>
+</select>
+</div>
+
+</div>
+
+<div class="row" style="margin-top:10px">
+
+<button class="btn"
+onclick="setRatio('pass',35/45)">
+🔒 35×45 Ratio
+</button>
+
+<button class="btn gray"
+onclick="unlockRatio('pass')">
+🔓 Unlock Ratio
+</button>
+
+<button class="btn orange"
+onclick="rotateImage('pass')">
+🔄 Rotate
+</button>
+
+<button class="btn green"
+onclick="applyCrop('pass')">
+✅ Apply Crop
+</button>
+
+</div>
+
+<div class="editor">
+
+<div class="cropStage" id="passStage">
+
+<img id="passImg">
+
+<div class="cropRect" id="passRect">
+
+<span class="handle tl"></span>
+<span class="handle tr"></span>
+<span class="handle bl"></span>
+<span class="handle br"></span>
+
+</div>
+
+</div>
+
+<div class="cropInfo">
+
+Crop Size:
+
+<b>
+<span id="passCropW">35</span>
+×
+<span id="passCropH">45</span>
+</b>
+
+<span id="passCropUnit">mm</span>
+
+</div>
+
+</div>
+
+<div class="previewBox">
+
+<h3>📸 Passport Print Preview</h3>
+
+<canvas id="passCanvas"></canvas>
+
+<br><br>
+
+<button class="btn green"
+onclick="createPassport();previewCanvas('passCanvas')">
+👁 Preview
+</button>
+
+<button class="btn"
+onclick="downloadCanvas('passCanvas','passport-photo.png')">
+⬇ Download
+</button>
+
+<button class="btn"
+onclick="printCanvas('passCanvas')">
+🖨 Print
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     AADHAAR
+===================================================== -->
+
+<section id="aadhaar" class="section">
+
+<h2>🪪 Aadhaar Card Print Tool</h2>
+
+<p>
+Prepare Aadhaar front and back images for card-size printing.
+You can crop, resize, rotate, preview and print both sides.
+</p>
+
+<div class="row">
+
+<div class="field">
+<label>Front Image</label>
+<input type="file" id="aadFront" accept="image/*">
+</div>
+
+<div class="field">
+<label>Back Image</label>
+<input type="file" id="aadBack" accept="image/*">
+</div>
+
+</div>
+
+<div class="row" style="margin-top:10px">
+
+<button class="btn"
+onclick="setRatio('aadF',85.6/53.98)">
+🔒 Card Ratio
+</button>
+
+<button class="btn gray"
+onclick="unlockRatio('aadF')">
+🔓 Unlock
+</button>
+
+<button class="btn orange"
+onclick="rotateImage('aadF')">
+🔄 Front Rotate
+</button>
+
+<button class="btn"
+onclick="setRatio('aadB',85.6/53.98)">
+🔒 Card Ratio
+</button>
+
+<button class="btn gray"
+onclick="unlockRatio('aadB')">
+🔓 Unlock
+</button>
+
+<button class="btn orange"
+onclick="rotateImage('aadB')">
+🔄 Back Rotate
+</button>
+
+<button class="btn green"
+onclick="createAadhaar()">
+👁 Preview
+</button>
+
+</div>
+
+<div class="editor">
+
+<h3>Front Crop</h3>
+
+<div class="cropStage" id="aadFStage">
+
+<img id="aadFImg">
+
+<div class="cropRect" id="aadFRect">
+
+<span class="handle tl"></span>
+<span class="handle tr"></span>
+<span class="handle bl"></span>
+<span class="handle br"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="editor">
+
+<h3>Back Crop</h3>
+
+<div class="cropStage" id="aadBStage">
+
+<img id="aadBImg">
+
+<div class="cropRect" id="aadBRect">
+
+<span class="handle tl"></span>
+<span class="handle tr"></span>
+<span class="handle bl"></span>
+<span class="handle br"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="previewBox">
+
+<h3>Preview</h3>
+
+<canvas id="aadCanvas"></canvas>
+
+<br><br>
+
+<button class="btn"
+onclick="previewCanvas('aadCanvas')">
+👁 Preview
+</button>
+
+<button class="btn green"
+onclick="downloadCanvas('aadCanvas','aadhaar-front-back.png')">
+⬇ Download
+</button>
+
+<button class="btn"
+onclick="printCanvas('aadCanvas')">
+🖨 Print
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     PVC
+===================================================== -->
+
+<section id="pvc" class="section">
+
+<h2>💳 PVC Card Print Tool</h2>
+
+<p>
+Prepare front and back images in standard card dimensions.
+Use crop, rotation, preview and print options.
+</p>
+
+<div class="row">
+
+<div class="field">
+<label>Front</label>
+<input type="file" id="pvcFront" accept="image/*">
+</div>
+
+<div class="field">
+<label>Back</label>
+<input type="file" id="pvcBack" accept="image/*">
+</div>
+
+</div>
+
+<div class="row" style="margin-top:10px">
+
+<button class="btn"
+onclick="setRatio('pvcF',85.6/53.98)">
+🔒 Card Ratio
+</button>
+
+<button class="btn gray"
+onclick="unlockRatio('pvcF')">
+🔓 Unlock
+</button>
+
+<button class="btn orange"
+onclick="rotateImage('pvcF')">
+🔄 Front Rotate
+</button>
+
+<button class="btn"
+onclick="setRatio('pvcB',85.6/53.98)">
+🔒 Card Ratio
+</button>
+
+<button class="btn gray"
+onclick="unlockRatio('pvcB')">
+🔓 Unlock
+</button>
+
+<button class="btn orange"
+onclick="rotateImage('pvcB')">
+🔄 Back Rotate
+</button>
+
+<button class="btn green"
+onclick="createPVC()">
+👁 Preview
+</button>
+
+</div>
+
+<div class="editor">
+
+<h3>Front Crop</h3>
+
+<div class="cropStage" id="pvcFStage">
+
+<img id="pvcFImg">
+
+<div class="cropRect" id="pvcFRect">
+
+<span class="handle tl"></span>
+<span class="handle tr"></span>
+<span class="handle bl"></span>
+<span class="handle br"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="editor">
+
+<h3>Back Crop</h3>
+
+<div class="cropStage" id="pvcBStage">
+
+<img id="pvcBImg">
+
+<div class="cropRect" id="pvcBRect">
+
+<span class="handle tl"></span>
+<span class="handle tr"></span>
+<span class="handle bl"></span>
+<span class="handle br"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="previewBox">
+
+<h3>Preview</h3>
+
+<canvas id="pvcCanvas"></canvas>
+
+<br><br>
+
+<button class="btn"
+onclick="previewCanvas('pvcCanvas')">
+👁 Preview
+</button>
+
+<button class="btn green"
+onclick="downloadCanvas('pvcCanvas','pvc-front-back.png')">
+⬇ Download
+</button>
+
+<button class="btn"
+onclick="printCanvas('pvcCanvas')">
+🖨 Print
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     CUSTOM CARD
+===================================================== -->
+
+<section id="card" class="section">
+
+<h2>💳 Custom Card Print Tool</h2>
+
+<p>
+Create a printable front and back layout for custom card images.
+</p>
+
+<div class="row">
+
+<div class="field">
+<label>Front</label>
+<input type="file" id="cardFront" accept="image/*">
+</div>
+
+<div class="field">
+<label>Back</label>
+<input type="file" id="cardBack" accept="image/*">
+</div>
+
+<div class="field">
+<label>Copies</label>
+<input type="number" id="cardCopies" value="1" min="1" max="20">
+</div>
+
+</div>
+
+<div class="row" style="margin-top:10px">
+
+<button class="btn"
+onclick="setRatio('cardF',85.6/53.98)">
+🔒 Card Ratio
+</button>
+
+<button class="btn gray"
+onclick="unlockRatio('cardF')">
+🔓 Unlock
+</button>
+
+<button class="btn orange"
+onclick="rotateImage('cardF')">
+🔄 Front Rotate
+</button>
+
+<button class="btn"
+onclick="setRatio('cardB',85.6/53.98)">
+🔒 Card Ratio
+</button>
+
+<button class="btn gray"
+onclick="unlockRatio('cardB')">
+🔓 Unlock
+</button>
+
+<button class="btn orange"
+onclick="rotateImage('cardB')">
+🔄 Back Rotate
+</button>
+
+<button class="btn green"
+onclick="createCard()">
+👁 Preview
+</button>
+
+</div>
+
+<div class="editor">
+
+<h3>Front Crop</h3>
+
+<div class="cropStage" id="cardFStage">
+
+<img id="cardFImg">
+
+<div class="cropRect" id="cardFRect">
+
+<span class="handle tl"></span>
+<span class="handle tr"></span>
+<span class="handle bl"></span>
+<span class="handle br"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="editor">
+
+<h3>Back Crop</h3>
+
+<div class="cropStage" id="cardBStage">
+
+<img id="cardBImg">
+
+<div class="cropRect" id="cardBRect">
+
+<span class="handle tl"></span>
+<span class="handle tr"></span>
+<span class="handle bl"></span>
+<span class="handle br"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="previewBox">
+
+<h3>Preview</h3>
+
+<canvas id="cardCanvas"></canvas>
+
+<br><br>
+
+<button class="btn"
+onclick="previewCanvas('cardCanvas')">
+👁 Preview
+</button>
+
+<button class="btn green"
+onclick="downloadCanvas('cardCanvas','custom-card.png')">
+⬇ Download
+</button>
+
+<button class="btn"
+onclick="printCanvas('cardCanvas')">
+🖨 Print
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     A4
+===================================================== -->
+
+<section id="a4" class="section">
+
+<h2>📄 A4 Print Tool</h2>
+
+<p>
+Prepare an image for A4-size printing in portrait or landscape orientation.
+</p>
+
+<div class="row">
+
+<div class="field">
+<label>Image</label>
+<input type="file" id="a4File" accept="image/*">
+</div>
+
+<div class="field">
+
+<label>Orientation</label>
+
+<select id="a4Orientation">
+
+<option value="portrait">
+Portrait
+</option>
+
+<option value="landscape">
+Landscape
+</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="row" style="margin-top:10px">
+
+<button class="btn"
+onclick="setRatio('a4',210/297)">
+🔒 A4 Ratio
+</button>
+
+<button class="btn gray"
+onclick="unlockRatio('a4')">
+🔓 Unlock
+</button>
+
+<button class="btn orange"
+onclick="rotateImage('a4')">
+🔄 Rotate
+</button>
+
+<button class="btn green"
+onclick="createA4()">
+👁 Preview
+</button>
+
+</div>
+
+<div class="editor">
+
+<div class="cropStage" id="a4Stage">
+
+<img id="a4Img">
+
+<div class="cropRect" id="a4Rect">
+
+<span class="handle tl"></span>
+<span class="handle tr"></span>
+<span class="handle bl"></span>
+<span class="handle br"></span>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="previewBox">
+
+<h3>Preview</h3>
+
+<canvas id="a4Canvas"></canvas>
+
+<br><br>
+
+<button class="btn"
+onclick="previewCanvas('a4Canvas')">
+👁 Preview
+</button>
+
+<button class="btn green"
+onclick="downloadCanvas('a4Canvas','A4-print.png')">
+⬇ Download
+</button>
+
+<button class="btn"
+onclick="printCanvas('a4Canvas')">
+🖨 Print
+</button>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     USEFUL CONTENT
+===================================================== -->
+
+<section id="guides" class="section">
+
+<h2>📚 Useful Printing Guides</h2>
+
+<p>
+This section provides general information to help users prepare
+digital images and documents for printing.
+</p>
+
+<div class="guide">
+
+<h3>📸 Passport Photo Size</h3>
+
+<p>
+A commonly used passport photograph size is 35 × 45 mm.
+Before printing, check the exact photo-size requirement of the
+organization, application or document for which the photograph
+will be used.
+</p>
+
+</div>
+
+<div class="guide">
+
+<h3>💳 Standard Card Size</h3>
+
+<p>
+A commonly used bank or ID card dimension is approximately
+85.6 × 53.98 mm. Actual requirements can differ depending on
+the card or organization.
+</p>
+
+</div>
+
+<div class="guide">
+
+<h3>📄 A4 Paper Size</h3>
+
+<p>
+A4 paper measures 210 × 297 mm. Portrait orientation is normally
+used for documents, while landscape orientation can be useful
+for wider content.
+</p>
+
+</div>
+
+<div class="guide">
+
+<h3>🖨️ Better Print Quality</h3>
+
+<p>
+For better results, use a clear, high-resolution source image.
+Check the crop carefully before printing and confirm that the
+selected paper size and printer settings match the intended
+output.
+</p>
+
+</div>
+
+<div class="guide">
+
+<h3>✂️ Crop Before Printing</h3>
+
+<p>
+Use the crop box to select only the required area of an image.
+The green crop box can be moved and its four corners can be
+resized. Ratio lock can be used when a fixed proportion is
+required.
+</p>
+
+</div>
+
+<div class="guide">
+
+<h3>🔒 Privacy While Using Image Tools</h3>
+
+<p>
+Avoid uploading or processing sensitive documents on computers
+you do not trust. Always follow applicable privacy and document
+handling requirements when working with identity documents.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     ABOUT
+===================================================== -->
+
+<section id="about" class="section">
+
+<h2>ℹ️ About Us</h2>
+
+<p>
+Welcome to Advanced Print Tool, an online utility designed to
+make common image-printing tasks simpler and more convenient.
+</p>
+
+<p>
+The website provides browser-based tools for preparing passport
+size photographs, card images and A4 documents for printing.
+Users can crop images, adjust the crop area, rotate images,
+preview the result and download or print the prepared output.
+</p>
+
+<h3>Our Purpose</h3>
+
+<p>
+Our purpose is to provide simple and easy-to-understand browser
+tools for everyday printing and document preparation tasks.
+</p>
+
+<h3>Our Approach</h3>
+
+<p>
+We aim to keep the interface simple, mobile-friendly and easy
+to use. The tools are designed to assist users with image
+preparation and printing.
+</p>
+
+<p class="small">
+This website is an independent utility website and should not
+be considered an official website of any government department,
+bank, identity-document authority or other organization unless
+specifically stated.
+</p>
+
+</section>
+
+
+<!-- =====================================================
+     CONTACT
+===================================================== -->
+
+<section id="contact" class="section">
+
+<h2>📞 Contact Us</h2>
+
+<div class="contactBox">
+
+<h3>Need Help?</h3>
+
+<p>
+If you have questions about the website, printing tools,
+technical issues or general website information, you can
+contact the website administrator.
+</p>
+
+<p>
+<strong>Email:</strong>
+your-email@example.com
+</p>
+
+<p>
+<strong>Website:</strong>
+Advanced Print Tool
+</p>
+
+<p class="small">
+Please do not send passwords, OTPs, bank PINs, Aadhaar numbers,
+PAN numbers or other highly sensitive information through
+ordinary contact messages.
+</p>
+
+</div>
+
+</section>
+
+
+<!-- =====================================================
+     PRIVACY POLICY
+===================================================== -->
+
+<section id="privacy" class="section">
+
+<h2>🔒 Privacy Policy</h2>
+
+<p>
+Your privacy is important to us. This Privacy Policy explains
+how information may be handled when you use this website.
+</p>
+
+<h3>1. Images and Files</h3>
+
+<p>
+The image-processing features of this website are designed to
+work in your web browser. Depending on your browser and the
+specific feature being used, selected images may be processed
+locally on your device.
+</p>
+
+<p>
+Users should avoid uploading or processing sensitive documents
+on devices or websites unless they understand how the service
+handles such information.
+</p>
+
+<h3>2. Personal Information</h3>
+
+<p>
+We do not intentionally request personal information simply for
+using the basic image-printing tools. If you voluntarily contact
+us, information you provide may be used to respond to your
+request.
+</p>
+
+<h3>3. Cookies</h3>
+
+<p>
+This website or third-party services used on the website may
+use cookies or similar technologies for functionality,
+analytics or advertising.
+</p>
+
+<h3>4. Advertising</h3>
+
+<p>
+If advertising services such as Google AdSense are used on this
+website, advertising providers may use cookies or similar
+technologies according to their own policies and applicable
+privacy requirements.
+</p>
+
+<h3>5. Third-Party Services</h3>
+
+<p>
+The website may use third-party services such as analytics,
+advertising or hosting services. These services may process
+information according to their own privacy policies.
+</p>
+
+<h3>6. Policy Updates</h3>
+
+<p>
+This Privacy Policy may be updated from time to time to reflect
+changes in the website, technology or applicable requirements.
+</p>
+
+<p>
+<strong>Last updated:</strong> September 2026
+</p>
+
+</section>
+
+
+<!-- =====================================================
+     TERMS
+===================================================== -->
+
+<section id="terms" class="section">
+
+<h2>📜 Terms & Conditions</h2>
+
+<h3>1. Acceptance</h3>
+
+<p>
+By using this website, you agree to use the tools responsibly
+and in accordance with applicable laws and regulations.
+</p>
+
+<h3>2. Tool Purpose</h3>
+
+<p>
+The tools are provided for general image preparation,
+printing and document-layout assistance.
+</p>
+
+<h3>3. Accuracy</h3>
+
+<p>
+Although the website attempts to provide accurate dimensions
+and useful tools, users are responsible for checking the final
+output before printing or submitting a document.
+</p>
+
+<h3>4. User Responsibility</h3>
+
+<p>
+Users are responsible for ensuring that the images and documents
+they process are lawful and that they have the necessary rights
+or permission to use them.
+</p>
+
+<h3>5. No Guarantee</h3>
+
+<p>
+The website does not guarantee that a particular printed image,
+document or photograph will be accepted by a particular
+organization.
+</p>
+
+<h3>6. Changes to Service</h3>
+
+<p>
+Features, tools and website content may be modified, updated
+or removed without prior notice.
+</p>
+
+<h3>7. Third-Party Websites</h3>
+
+<p>
+The website may contain references or links to third-party
+services. We are not responsible for the content, privacy
+practices or availability of third-party websites.
+</p>
+
+</section>
+
+
+<!-- =====================================================
+     DISCLAIMER
+===================================================== -->
+
+<section id="disclaimer" class="section">
+
+<h2>⚠️ Disclaimer</h2>
+
+<p>
+The information and tools provided on this website are intended
+for general informational and utility purposes only.
+</p>
+
+<p>
+This website is not affiliated with, endorsed by, sponsored by,
+or officially connected with any government department, Aadhaar
+authority, PAN authority, bank, passport authority or other
+government or private organization unless expressly stated.
+</p>
+
+<p>
+The website provides image preparation and printing assistance.
+It does not issue, verify, approve or authenticate government
+documents, identity cards, certificates or applications.
+</p>
+
+<p>
+Users should always check the official requirements of the
+relevant authority before submitting a photograph, card image
+or document.
+</p>
+
+<p>
+We are not responsible for rejection, printing errors,
+incorrect dimensions, image-quality issues, application
+rejection or any loss resulting from the use of the website.
+</p>
+
+</section>
+
+
+</div>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<footer>
+
+<div class="footerInner">
+
+<h3>🖨️ Advanced Print Tool</h3>
+
+<p>
+Simple tools for passport photos, cards and A4 printing.
+</p>
+
+<div class="footerLinks">
+
+<button onclick="showSection('passport')">
+Passport
+</button>
+
+<button onclick="showSection('aadhaar')">
+Aadhaar
+</button>
+
+<button onclick="showSection('pvc')">
+PVC
+</button>
+
+<button onclick="showSection('guides')">
+Guides
+</button>
+
+<button onclick="showSection('about')">
+About
+</button>
+
+<button onclick="showSection('contact')">
+Contact
+</button>
+
+<button onclick="showSection('privacy')">
+Privacy Policy
+</button>
+
+<button onclick="showSection('terms')">
+Terms
+</button>
+
+<button onclick="showSection('disclaimer')">
+Disclaimer
+</button>
+
+</div>
+
+<p class="small" style="color:#94a3b8">
+© 2026 Advanced Print Tool. All rights reserved.
+</p>
+
+</div>
+
+</footer>
+
+
+<div id="printArea"></div>
+
+
+<script>
+
+/* =========================================================
+   CROP ENGINE
+========================================================= */
+
+const cropState={};
+
+const configs={
+
+pass:{
+img:'passImg',
+rect:'passRect',
+stage:'passStage',
+file:'passFile'
+},
+
+aadF:{
+img:'aadFImg',
+rect:'aadFRect',
+stage:'aadFStage',
+file:'aadFront'
+},
+
+aadB:{
+img:'aadBImg',
+rect:'aadBRect',
+stage:'aadBStage',
+file:'aadBack'
+},
+
+pvcF:{
+img:'pvcFImg',
+rect:'pvcFRect',
+stage:'pvcFStage',
+file:'pvcFront'
+},
+
+pvcB:{
+img:'pvcBImg',
+rect:'pvcBRect',
+stage:'pvcBStage',
+file:'pvcBack'
+},
+
+cardF:{
+img:'cardFImg',
+rect:'cardFRect',
+stage:'cardFStage',
+file:'cardFront'
+},
+
+cardB:{
+img:'cardBImg',
+rect:'cardBRect',
+stage:'cardBStage',
+file:'cardBack'
+},
+
+a4:{
+img:'a4Img',
+rect:'a4Rect',
+stage:'a4Stage',
+file:'a4File'
+}
+
+};
+
+
+function getRatio(id){
+
+if(id==='pass')
+return 35/45;
+
+if([
+'aadF',
+'aadB',
+'pvcF',
+'pvcB',
+'cardF',
+'cardB'
+].includes(id))
+return 85.6/53.98;
+
+if(id==='a4')
+return 210/297;
+
+return cropState[id]?.ratio||1;
+
+}
+
+
+function initState(id){
+
+if(!cropState[id]){
+
+cropState[id]={
+
+ratio:getRatio(id),
+
+locked:true,
+
+x:0,
+y:0,
+w:100,
+h:100,
+
+rotation:0,
+
+loaded:false
+
+};
+
+}
+
+return cropState[id];
+
+}
+
+
+function loadImageFor(id,file){
+
+if(!file)return;
+
+const cfg=configs[id];
+
+const img=
+document.getElementById(cfg.img);
+
+const state=initState(id);
+
+const url=
+URL.createObjectURL(file);
+
+img.onload=()=>{
+
+state.loaded=true;
+
+state.x=0;
+state.y=0;
+
+state.w=img.naturalWidth;
+state.h=img.naturalHeight;
+
+fitCropToRatio(id);
+
+renderCrop(id);
+
+URL.revokeObjectURL(url);
+
+};
+
+img.src=url;
+
+}
+
+
+Object.keys(configs).forEach(id=>{
+
+const input=
+document.getElementById(
+configs[id].file
+);
+
+input.addEventListener(
+'change',
+e=>{
+
+const file=
+e.target.files[0];
+
+loadImageFor(id,file);
+
+}
+);
+
+});
+
+
+function getDisplayScale(id){
+
+const cfg=configs[id];
+
+const img=
+document.getElementById(
+cfg.img
+);
+
+if(!img.naturalWidth)
+return 1;
+
+return img.clientWidth/
+img.naturalWidth;
+
+}
+
+
+function renderCrop(id){
+
+const cfg=configs[id];
+
+const img=
+document.getElementById(
+cfg.img
+);
+
+const rect=
+document.getElementById(
+cfg.rect
+);
+
+const state=initState(id);
+
+if(
+!state.loaded||
+!img.naturalWidth
+)
+return;
+
+const scale=
+getDisplayScale(id);
+
+rect.style.left=
+(state.x*scale)+'px';
+
+rect.style.top=
+(state.y*scale)+'px';
+
+rect.style.width=
+(state.w*scale)+'px';
+
+rect.style.height=
+(state.h*scale)+'px';
+
+updateCropText(id);
+
+}
+
+
+function updateCropText(id){
+
+const state=initState(id);
+
+if(id==='pass'){
+
+const unit=
+document.getElementById(
+'passUnit'
+).value;
+
+let w=state.w;
+let h=state.h;
+
+if(unit==='mm'){
+
+h=45;
+w=h*(state.w/state.h);
+
+}
+
+document.getElementById(
+'passCropW'
+).textContent=
+w.toFixed(2);
+
+document.getElementById(
+'passCropH'
+).textContent=
+h.toFixed(2);
+
+document.getElementById(
+'passCropUnit'
+).textContent=
+unit;
+
+}
+
+}
+
+
+function fitCropToRatio(id){
+
+const cfg=configs[id];
+
+const img=
+document.getElementById(
+cfg.img
+);
+
+const state=initState(id);
+
+if(!img.naturalWidth)
+return;
+
+const ratio=state.ratio;
+
+let w=
+img.naturalWidth*.75;
+
+let h=w/ratio;
+
+if(
+h>
+img.naturalHeight*.75
+){
+
+h=
+img.naturalHeight*.75;
+
+w=h*ratio;
+
+}
+
+if(w>img.naturalWidth){
+
+w=img.naturalWidth;
+h=w/ratio;
+
+}
+
+if(h>img.naturalHeight){
+
+h=img.naturalHeight;
+w=h*ratio;
+
+}
+
+state.w=w;
+state.h=h;
+
+state.x=
+(img.naturalWidth-w)/2;
+
+state.y=
+(img.naturalHeight-h)/2;
+
+renderCrop(id);
+
+}
+
+
+function setRatio(id,ratio){
+
+const state=initState(id);
+
+state.ratio=ratio;
+
+state.locked=true;
+
+if(state.loaded)
+fitCropToRatio(id);
+
+renderCrop(id);
+
+}
+
+
+function unlockRatio(id){
+
+initState(id).locked=false;
+
+}
+
+
+function keepInside(id){
+
+const cfg=configs[id];
+
+const img=
+document.getElementById(
+cfg.img
+);
+
+const s=initState(id);
+
+if(s.x<0)s.x=0;
+
+if(s.y<0)s.y=0;
+
+if(s.w>img.naturalWidth)
+s.w=img.naturalWidth;
+
+if(s.h>img.naturalHeight)
+s.h=img.naturalHeight;
+
+if(
+s.x+s.w>
+img.naturalWidth
+)
+s.x=
+img.naturalWidth-s.w;
+
+if(
+s.y+s.h>
+img.naturalHeight
+)
+s.y=
+img.naturalHeight-s.h;
+
+}
+
+
+function pointerPosition(e){
+
+if(
+e.touches&&
+e.touches.length
+){
+
+return{
+
+x:e.touches[0].clientX,
+y:e.touches[0].clientY
+
+};
+
+}
+
+return{
+
+x:e.clientX,
+y:e.clientY
+
+};
+
+}
+
+
+/* =========================================================
+   DRAG
+========================================================= */
+
+function enableDrag(id){
+
+const cfg=configs[id];
+
+const rect=
+document.getElementById(
+cfg.rect
+);
+
+const state=initState(id);
+
+let dragging=false;
+
+let sx=0;
+let sy=0;
+
+let ox=0;
+let oy=0;
+
+rect.addEventListener(
+'mousedown',
+start
+);
+
+rect.addEventListener(
+'touchstart',
+start,
+{passive:false}
+);
+
+
+function start(e){
+
+if(
+e.target.classList.contains(
+'handle'
+)
+)return;
+
+e.preventDefault();
+
+const p=
+pointerPosition(e);
+
+dragging=true;
+
+sx=p.x;
+sy=p.y;
+
+ox=state.x;
+oy=state.y;
+
+document.addEventListener(
+'mousemove',
+move
+);
+
+document.addEventListener(
+'mouseup',
+end
+);
+
+document.addEventListener(
+'touchmove',
+move,
+{passive:false}
+);
+
+document.addEventListener(
+'touchend',
+end
+);
+
+}
+
+
+function move(e){
+
+if(!dragging)return;
+
+e.preventDefault();
+
+const p=
+pointerPosition(e);
+
+const scale=
+getDisplayScale(id);
+
+state.x=
+ox+(p.x-sx)/scale;
+
+state.y=
+oy+(p.y-sy)/scale;
+
+keepInside(id);
+
+renderCrop(id);
+
+}
+
+
+function end(){
+
+dragging=false;
+
+document.removeEventListener(
+'mousemove',
+move
+);
+
+document.removeEventListener(
+'mouseup',
+end
+);
+
+document.removeEventListener(
+'touchmove',
+move
+);
+
+document.removeEventListener(
+'touchend',
+end
+);
+
+}
+
+}
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+function enableResize(id){
+
+const cfg=configs[id];
+
+const rect=
+document.getElementById(
+cfg.rect
+);
+
+const img=
+document.getElementById(
+cfg.img
+);
+
+const state=initState(id);
+
+[
+'tl',
+'tr',
+'bl',
+'br'
+].forEach(handleName=>{
+
+const handle=
+rect.querySelector(
+'.'+handleName
+);
+
+handle.addEventListener(
+'mousedown',
+start
+);
+
+handle.addEventListener(
+'touchstart',
+start,
+{passive:false}
+);
+
+let startX;
+let startY;
+
+let startState={};
+
+
+function start(e){
+
+e.preventDefault();
+e.stopPropagation();
+
+const p=
+pointerPosition(e);
+
+startX=p.x;
+startY=p.y;
+
+startState={
+
+x:state.x,
+y:state.y,
+w:state.w,
+h:state.h
+
+};
+
+document.addEventListener(
+'mousemove',
+move
+);
+
+document.addEventListener(
+'mouseup',
+end
+);
+
+document.addEventListener(
+'touchmove',
+move,
+{passive:false}
+);
+
+document.addEventListener(
+'touchend',
+end
+);
+
+}
+
+
+function move(e){
+
+e.preventDefault();
+
+const p=
+pointerPosition(e);
+
+const scale=
+getDisplayScale(id);
+
+const dx=
+(p.x-startX)/scale;
+
+const dy=
+(p.y-startY)/scale;
+
+let x=startState.x;
+let y=startState.y;
+
+let w=startState.w;
+let h=startState.h;
+
+
+if(handleName.includes('r'))
+w=startState.w+dx;
+
+if(handleName.includes('l')){
+
+w=startState.w-dx;
+
+x=startState.x+dx;
+
+}
+
+if(handleName.includes('b'))
+h=startState.h+dy;
+
+if(handleName.includes('t')){
+
+h=startState.h-dy;
+
+y=startState.y+dy;
+
+}
+
+
+if(state.locked){
+
+const ratio=state.ratio;
+
+if(
+Math.abs(dx)>=
+Math.abs(dy)
+)
+h=w/ratio;
+else
+w=h*ratio;
+
+if(handleName.includes('l'))
+x=
+startState.x+
+startState.w-
+w;
+
+if(handleName.includes('t'))
+y=
+startState.y+
+startState.h-
+h;
+
+}
+
+
+const min=30;
+
+if(w<min)w=min;
+if(h<min)h=min;
+
+if(x<0){
+
+w+=x;
+x=0;
+
+}
+
+if(y<0){
+
+h+=y;
+y=0;
+
+}
+
+if(
+x+w>
+img.naturalWidth
+)
+w=
+img.naturalWidth-x;
+
+if(
+y+h>
+img.naturalHeight
+)
+h=
+img.naturalHeight-y;
+
+
+if(state.locked){
+
+const ratio=state.ratio;
+
+if(w/h>ratio)
+w=h*ratio;
+else
+h=w/ratio;
+
+if(handleName.includes('l'))
+x=
+startState.x+
+startState.w-
+w;
+
+if(handleName.includes('t'))
+y=
+startState.y+
+startState.h-
+h;
+
+}
+
+state.x=x;
+state.y=y;
+state.w=w;
+state.h=h;
+
+keepInside(id);
+
+renderCrop(id);
+
+}
+
+
+function end(){
+
+document.removeEventListener(
+'mousemove',
+move
+);
+
+document.removeEventListener(
+'mouseup',
+end
+);
+
+document.removeEventListener(
+'touchmove',
+move
+);
+
+document.removeEventListener(
+'touchend',
+end
+);
+
+}
+
+});
+
+}
+
+
+Object.keys(configs).forEach(id=>{
+
+initState(id);
+
+enableDrag(id);
+
+enableResize(id);
+
+});
+
+
+/* =========================================================
+   ROTATE
+========================================================= */
+
+function rotateImage(id){
+
+const cfg=configs[id];
+
+const img=
+document.getElementById(
+cfg.img
+);
+
+const state=initState(id);
+
+if(!state.loaded)
+return;
+
+const canvas=
+document.createElement(
+'canvas'
+);
+
+const ctx=
+canvas.getContext('2d');
+
+canvas.width=
+img.naturalHeight;
+
+canvas.height=
+img.naturalWidth;
+
+ctx.translate(
+canvas.width/2,
+canvas.height/2
+);
+
+ctx.rotate(
+Math.PI/2
+);
+
+ctx.drawImage(
+img,
+-img.naturalWidth/2,
+-img.naturalHeight/2
+);
+
+const url=
+canvas.toDataURL(
+'image/png'
+);
+
+img.onload=()=>{
+
+state.rotation=
+(state.rotation+90)%360;
+
+state.x=0;
+state.y=0;
+
+state.w=img.naturalWidth;
+state.h=img.naturalHeight;
+
+fitCropToRatio(id);
+
+renderCrop(id);
+
+};
+
+img.src=url;
+
+}
+
+
+/* =========================================================
+   CROPPED IMAGE
+========================================================= */
+
+function getCropped(
+id,
+targetW,
+targetH
+){
+
+const cfg=configs[id];
+
+const img=
+document.getElementById(
+cfg.img
+);
+
+const state=initState(id);
+
+if(!state.loaded)
+return null;
+
+let w=
+targetW||
+Math.round(state.w);
+
+let h=
+targetH||
+Math.round(state.h);
+
+const canvas=
+document.createElement(
+'canvas'
+);
+
+canvas.width=w;
+canvas.height=h;
+
+const ctx=
+canvas.getContext('2d');
+
+ctx.imageSmoothingEnabled=true;
+
+ctx.imageSmoothingQuality=
+'high';
+
+ctx.drawImage(
+
+img,
+
+state.x,
+state.y,
+state.w,
+state.h,
+
+0,
+0,
+w,
+h
+
+);
+
+return canvas;
+
+}
+
+
+function mmToPx(mm){
+
+return Math.round(
+mm*300/25.4
+);
+
+}
+
+
+/* =========================================================
+   PASSPORT
+========================================================= */
+
+function createPassport(){
+
+const canvas=
+document.getElementById(
+'passCanvas'
+);
+
+const count=
+parseInt(
+document.getElementById(
+'passCount'
+).value
+)||8;
+
+const bg=
+document.getElementById(
+'passBg'
+).value;
+
+const photoW=
+mmToPx(35);
+
+const photoH=
+mmToPx(45);
+
+const source=
+getCropped(
+'pass',
+photoW,
+photoH
+);
+
+if(!source){
+
+alert(
+'પહેલા Passport Photo પસંદ કરો.'
+);
+
+return false;
+
+}
+
+const cols=4;
+
+const rows=
+Math.ceil(count/cols);
+
+const gap=
+mmToPx(3);
+
+canvas.width=
+cols*photoW+
+(cols+1)*gap;
+
+canvas.height=
+rows*photoH+
+(rows+1)*gap;
+
+const ctx=
+canvas.getContext('2d');
+
+ctx.fillStyle='#fff';
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+for(
+let i=0;
+i<count;
+i++
+){
+
+const col=i%cols;
+
+const row=
+Math.floor(i/cols);
+
+const x=
+gap+
+col*(photoW+gap);
+
+const y=
+gap+
+row*(photoH+gap);
+
+if(bg==='blue'){
+
+ctx.fillStyle='#0b5ed7';
+
+ctx.fillRect(
+x,
+y,
+photoW,
+photoH
+);
+
+}
+
+ctx.drawImage(
+source,
+x,
+y,
+photoW,
+photoH
+);
+
+}
+
+return true;
+
+}
+
+
+/* =========================================================
+   AADHAAR
+========================================================= */
+
+function createAadhaar(){
+
+const front=
+getCropped(
+'aadF',
+mmToPx(85.6),
+mmToPx(53.98)
+);
+
+const back=
+getCropped(
+'aadB',
+mmToPx(85.6),
+mmToPx(53.98)
+);
+
+if(!front||!back){
+
+alert(
+'Front અને Back બંને image પસંદ કરો.'
+);
+
+return;
+
+}
+
+const canvas=
+document.getElementById(
+'aadCanvas'
+);
+
+const gap=40;
+
+canvas.width=
+front.width;
+
+canvas.height=
+front.height*2+
+gap;
+
+const ctx=
+canvas.getContext('2d');
+
+ctx.fillStyle='#fff';
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+ctx.drawImage(
+front,
+0,
+0
+);
+
+ctx.drawImage(
+back,
+0,
+front.height+gap
+);
+
+}
+
+
+/* =========================================================
+   PVC
+========================================================= */
+
+function createPVC(){
+
+const front=
+getCropped(
+'pvcF',
+mmToPx(85.6),
+mmToPx(53.98)
+);
+
+const back=
+getCropped(
+'pvcB',
+mmToPx(85.6),
+mmToPx(53.98)
+);
+
+if(!front||!back){
+
+alert(
+'Front અને Back image પસંદ કરો.'
+);
+
+return;
+
+}
+
+const canvas=
+document.getElementById(
+'pvcCanvas'
+);
+
+const gap=40;
+
+canvas.width=
+front.width;
+
+canvas.height=
+front.height*2+
+gap;
+
+const ctx=
+canvas.getContext('2d');
+
+ctx.fillStyle='#fff';
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+ctx.drawImage(
+front,
+0,
+0
+);
+
+ctx.drawImage(
+back,
+0,
+front.height+gap
+);
+
+}
+
+
+/* =========================================================
+   CARD
+========================================================= */
+
+function createCard(){
+
+const front=
+getCropped(
+'cardF',
+mmToPx(85.6),
+mmToPx(53.98)
+);
+
+const back=
+getCropped(
+'cardB',
+mmToPx(85.6),
+mmToPx(53.98)
+);
+
+if(!front||!back){
+
+alert(
+'Front અને Back image પસંદ કરો.'
+);
+
+return;
+
+}
+
+const copies=
+parseInt(
+document.getElementById(
+'cardCopies'
+).value
+)||1;
+
+const gap=40;
+
+const canvas=
+document.getElementById(
+'cardCanvas'
+);
+
+canvas.width=
+front.width*2+
+gap;
+
+canvas.height=
+front.height*copies+
+gap*(copies-1);
+
+const ctx=
+canvas.getContext('2d');
+
+ctx.fillStyle='#fff';
+
+ctx.fillRect(
+0,
+0,
+canvas.width,
+canvas.height
+);
+
+for(
+let i=0;
+i<copies;
+i++
+){
+
+const y=
+i*(front.height+gap);
+
+ctx.drawImage(
+front,
+0,
+y
+);
+
+ctx.drawImage(
+back,
+front.width+gap,
+y
+);
+
+}
+
+}
+
+
+/* =========================================================
+   A4
+========================================================= */
+
+function createA4(){
+
+const orientation=
+document.getElementById(
+'a4Orientation'
+).value;
+
+let w=
+mmToPx(210);
+
+let h=
+mmToPx(297);
+
+if(
+orientation==='landscape'
+){
+
+[w,h]=[h,w];
+
+}
+
+const source=
+getCropped(
+'a4',
+w,
+h
+);
+
+if(!source){
+
+alert(
+'A4 માટે image પસંદ કરો.'
+);
+
+return;
+
+}
+
+const canvas=
+document.getElementById(
+'a4Canvas'
+);
+
+canvas.width=w;
+canvas.height=h;
+
+const ctx=
+canvas.getContext('2d');
+
+ctx.drawImage(
+source,
+0,
+0,
+w,
+h
+);
+
+}
+
+
+/* =========================================================
+   DOWNLOAD
+========================================================= */
+
+function downloadCanvas(
+id,
+name
+){
+
+const canvas=
+document.getElementById(id);
+
+if(!canvas.width){
+
+alert(
+'પહેલા Preview બનાવો.'
+);
+
+return;
+
+}
+
+const link=
+document.createElement('a');
+
+link.download=name;
+
+link.href=
+canvas.toDataURL(
+'image/png'
+);
+
+link.click();
+
+}
+
+
+/* =========================================================
+   PREVIEW
+========================================================= */
+
+function previewCanvas(id){
+
+const canvas=
+document.getElementById(id);
+
+if(!canvas||!canvas.width){
+
+alert(
+'પહેલા Preview તૈયાર કરો.'
+);
+
+return;
+
+}
+
+const win=
+window.open(
+'',
+'_blank'
+);
+
+if(!win){
+
+alert(
+'Browser popup block કરી રહ્યું છે. Popup allow કરો.'
+);
+
+return;
+
+}
+
+const image=
+canvas.toDataURL(
+'image/png'
+);
+
+const isPassport=
+id==='passCanvas';
+
+win.document.write(`
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>
+${isPassport
+?'Passport Size Photo Preview'
+:'Print Preview'}
+</title>
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1"
+>
+
+<style>
+
+*{
+box-sizing:border-box;
+}
+
+body{
+
+margin:0;
+
+padding:20px;
+
+background:#eef2f7;
+
+font-family:Arial,sans-serif;
+
+text-align:center;
+
+}
+
+.header{
+
+background:white;
+
+padding:15px;
+
+border-radius:12px;
+
+margin-bottom:15px;
+
+box-shadow:0 2px 10px #0002;
+
+}
+
+.header h2{
+
+margin:0;
+
+color:#075985;
+
+}
+
+.header p{
+
+margin:6px 0 0;
+
+color:#64748b;
+
+font-size:13px;
+
+}
+
+.sheet{
+
+background:white;
+
+padding:15px;
+
+display:inline-block;
+
+box-shadow:0 3px 20px #0003;
+
+border-radius:4px;
+
+}
+
+.sheet img{
+
+display:block;
+
+max-width:100%;
+
+height:auto;
+
+}
+
+.buttons{
+
+margin-top:18px;
+
+}
+
+button{
+
+margin:5px;
+
+padding:12px 22px;
+
+border:0;
+
+border-radius:8px;
+
+background:#2563eb;
+
+color:white;
+
+font-size:15px;
+
+font-weight:bold;
+
+cursor:pointer;
+
+}
+
+button.print{
+background:#16a34a;
+}
+
+button.close{
+background:#475569;
+}
+
+.info{
+
+margin-top:12px;
+
+color:#475569;
+
+font-size:13px;
+
+}
+
+@media(max-width:600px){
+
+body{
+padding:10px;
+}
+
+.sheet{
+padding:8px;
+width:100%;
+}
+
+.sheet img{
+width:100%;
+}
+
+}
+
+@media print{
+
+body{
+background:white;
+padding:0;
+}
+
+.header,
+.buttons,
+.info{
+display:none;
+}
+
+.sheet{
+padding:0;
+box-shadow:none;
+border-radius:0;
+}
+
+.sheet img{
+max-width:none;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<h2>
+${isPassport
+?'📸 Passport Size Photo'
+:'👁 Print Preview'}
+</h2>
+
+<p>
+${isPassport
+?'35 × 45 mm • 300 DPI • Passport Photo Sheet'
+:'Preview તૈયાર છે'}
+</p>
+
+</div>
+
+<div class="sheet">
+
+<img src="${image}">
+
+</div>
+
+<div class="info">
+
+${isPassport
+?'Passport photo print preview'
+:'Print preview'}
+
+</div>
+
+<div class="buttons">
+
+<button
+class="print"
+onclick="window.print()">
+🖨 Print
+</button>
+
+<button
+class="close"
+onclick="window.close()">
+✖ Close
+</button>
+
+</div>
+
+</body>
+
+</html>
+
+`);
+
+win.document.close();
+
+}
+
+
+/* =========================================================
+   PRINT
+========================================================= */
+
+function printCanvas(id){
+
+const canvas=
+document.getElementById(id);
+
+if(!canvas.width){
+
+alert(
+'પહેલા Preview બનાવો.'
+);
+
+return;
+
+}
+
+const printArea=
+document.getElementById(
+'printArea'
+);
+
+printArea.innerHTML='';
+
+const cloned=
+canvas.cloneNode(true);
+
+printArea.appendChild(
+cloned
+);
+
+const ctx=
+cloned.getContext('2d');
+
+ctx.drawImage(
+canvas,
+0,
+0
+);
+
+setTimeout(
+()=>{
+window.print();
+},
+300
+);
+
+}
+
+
+/* =========================================================
+   APPLY CROP
+========================================================= */
+
+function applyCrop(id){
+
+const state=
+initState(id);
+
+if(!state.loaded){
+
+alert(
+'પહેલા image પસંદ કરો.'
+);
+
+return;
+
+}
+
+alert(
+'✅ Crop successfully applied.'
+);
+
+}
+
+
+/* =========================================================
+   SECTION NAVIGATION
+========================================================= */
+
+function showSection(id){
+
+document
+.querySelectorAll('.section')
+.forEach(
+s=>{
+s.style.display='none';
+}
+);
+
+const section=
+document.getElementById(id);
+
+if(section){
+
+section.style.display='block';
+
+window.scrollTo({
+top:0,
+behavior:'smooth'
+});
+
+}
+
+}
+
+
+/* =========================================================
+   DEFAULT
+========================================================= */
+
+showSection('passport');
+
+
+/* =========================================================
+   RESIZE
+========================================================= */
+
+window.addEventListener(
+'resize',
+()=>{
+
+Object.keys(configs)
+.forEach(id=>{
+
+if(
+cropState[id]?.loaded
+){
+
+renderCrop(id);
+
+}
+
+});
+
+}
+);
+
+</script>
+
+</body>
+</html>
